@@ -111,3 +111,98 @@ public class Parser {
         //return variables.contains(currentToken.getName());
         return false;
     }
+    
+    private boolean operation() throws Exception{
+        System.out.print("Вход в operation"+"\n");
+        if(op()){
+            return true;
+        }
+        return false;
+   }
+    
+    private boolean op() throws Exception{
+        System.out.print("Вход в op"+"\n");
+        numOfRTok++;
+        ws();
+        match();
+        if(currentToken.getName().equals("PLUS_OP")||
+            currentToken.getName().equals("MINUS_OP")||
+            currentToken.getName().equals("DEL_OP")||
+            currentToken.getName().equals("MULT_OP")||
+            currentToken.getName().equals("INVOL_OP")){
+            if(var()||digit()){
+                return true;
+            } 
+            currentTokenNumber--;
+            return false;
+        }
+        currentTokenNumber--;
+        return false;
+    }
+    
+    private boolean digit() throws Exception{
+        System.out.print("Вход в digit"+"\n");
+        ws();
+        match();
+        if(!currentToken.getName().equals("DIGIT")){
+            currentTokenNumber--;
+        }else{
+            numOfRTok++;
+        }
+        return currentToken.getName().equals("DIGIT");
+    }
+    
+    private boolean assign_op() throws Exception{
+        System.out.print("Вход в assign_op"+"\n");
+        numOfRTok++;
+        ws();
+        match();
+        return currentToken.getName().equals("ASSIGN_OP");
+    }
+    
+    private boolean sm() throws Exception{
+        System.out.print("Вход в sm"+"\n");
+        numOfRTok++;
+        ws();
+        match();
+        return currentToken.getName().equals("SM");
+    }
+    
+    private boolean var() throws Exception{
+        System.out.print("Вход в var"+"\n");
+        ws();
+        match();
+        if(!currentToken.getName().equals("VAR")){
+            currentTokenNumber--;
+        }else{
+            nameOfVar = currentToken.getValue();
+            numOfRTok++;
+        }
+        return currentToken.getName().equals("VAR");
+    }
+    
+    private boolean var_kw() throws Exception{
+        System.out.print("Вход в var_kw"+"\n");
+        numOfRTok++;
+        ws();
+        match();
+        return currentToken.getName().equals("VAR_KW");
+    }
+    
+    private void ws(){
+        System.out.print("Вход в ws"+"\n");
+        numOfRTok++;
+        match();
+        if(!currentToken.getName().equals("WS")){
+            numOfRTok--;
+            currentTokenNumber--;
+        }
+        
+    }
+    
+    private void addNewVal(){
+        System.out.print(nameOfVar+"\n");
+        variables.add(new Token("VAR",nameOfVar ));
+        varVal.add(0);
+    }
+}
